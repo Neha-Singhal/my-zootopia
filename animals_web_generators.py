@@ -9,15 +9,16 @@ def display_animal_info(animal):
     output = []
 
     if 'name' in animal:
-        output.append(f"Name: {animal['name']}")
+        output.append(f'<div class="card__title">{animal["name"]}</div>')
     if 'characteristics' in animal:
         characteristics = animal['characteristics']
-    if 'diet' in characteristics:
-        output.append(f"diet: {characteristics['diet']}")
+        if 'diet' in characteristics:
+            output.append(f'<p class="card__text"><strong>Diet:</strong> {characteristics["diet"]}<br/>')
+        if 'type' in characteristics:
+            output.append(f'<strong>Type:</strong> {characteristics["type"]}<br/>')
     if 'locations' in animal and animal['locations']:
-        output.append(f"Location:{animal['locations'][0]}")
-    if 'type' in characteristics:
-        output.append(f"type:{characteristics['type']}")
+        output.append(f'<strong>Location:</strong> {", ".join(animal["locations"])}<br/></p>')
+
     return "<br/>\n".join(output)
 
 def generate_animals_output(animals):
