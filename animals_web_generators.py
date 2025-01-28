@@ -1,23 +1,44 @@
 import json
-def load_data(animal_data):
+def load_data(file_path):
   """ Loads a JSON file """
-  with open(animal_data, "r") as handle:
+  with open(file_path, "r") as handle:
     return json.load(handle)
 
 
 def display_animal_info (animals):
+    output = []
     for animal in animals:
         if 'name' in animal:
-            print(f"Name: {animal ['name']}")
+            output.append(f"Name: {animal ['name']}")
         if 'characteristics' in animal:
             characteristics = animal['characteristics']
         if 'diet' in characteristics:
-            print(f"diet: {characteristics['diet']}")
+            output.append(f"diet: {characteristics['diet']}")
         if'locations' in animal and animal['locations']:
-            print(f"Location:{animal['locations'] [0]}")
+            output.append(f"Location:{animal['locations'] [0]}")
         if 'type' in characteristics:
-            print(f"type:{characteristics['type']}")
-        print()
+            output.append(f"type:{characteristics['type']}")
+        return "\n".join(output)
 
-animals_data = load_data('animals_data.json')
-display_animal_info(animals_data)
+
+def generate_animals_output(animals):
+    return "\n\n".join (display_animal_info(animals) for animal in animals)
+
+
+def main():
+    animals_data = load_data('animals_data.json')
+    animals_output = generate_animals_output(animals_data)
+
+    with open('animals_template.html','r') as template_file:
+        template_content = template_file.read()
+
+    new_html_content = template_content.replace('__REPLACE_ANIMALS_INFO__', animals_output)
+
+    with open('animals.html','w')as output_file:
+        output_file.write(new_html_content)
+
+    print(animals_output)
+
+
+if __name__ == "__main__":
+    main()
